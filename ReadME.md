@@ -28,5 +28,4 @@ It can be downloaded using the following link: https://nlp.stanford.edu/software
 ## You need to download the Glove file glove.6B.300d.txt and place it in the same directory as the main.py file
 ## It can be downloaded from this link: http://nlp.stanford.edu/data/glove.6B.zip
 ## uncomment the test_text_model() in the main function call in the main.py file if you want to test the text-based deep learning model.
-## By running the main.py function, you run the best found machine learning model on the FA-KES train and test datasets
 ## You can change the paths in the test_text_model() function in the main.py file in order to test it on other datasets. The other datasets are found in the other_datasets directory (Buzzfeed train and test features extraction are there)
