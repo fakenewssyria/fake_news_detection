@@ -1,0 +1,1 @@
+This folder consists of the class that performs exploratory analysis and plots the graphs for each exploratory analysis performed

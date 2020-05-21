@@ -1,0 +1,8 @@
+This folder consists of the classes needed for testing and training machine learning models on our dataset:
+
+decision_tree.py: trains and tests a decision tree model on our dataset
+naive_bayes.py: trains and tests a naives bayes model on our dataset
+neural_network.py: trains and tests a neural network model on our dataset
+regression.py: trains and tests a polynomial linear regression model on our dataset
+svm.py: trains and tests an svm model on our dataset
+learning_model.py: reads the train and test datasets and trains and tests all the above models on them

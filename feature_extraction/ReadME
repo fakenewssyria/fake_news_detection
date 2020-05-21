@@ -1,0 +1,6 @@
+This folder consists of the classes needed for feature extraction:
+
+lexicon_features.py handles extracting the sectarian language, report verbs, assertive verbs, bias, factive verbs, hedges, implicatives, and bias features.
+quoted_sources.py handles extracting the description of quoted sources feature.
+feature_extraction.py handles extracting the rest of the features.
+consistency_score.py handles extracting the consistency score for the FA-KES dataset.

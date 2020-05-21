@@ -1,0 +1,9 @@
+This folder consists of the lexicons needed for feature extraction.
+
+assertive.txt: needed for the assertive verbs frequency feature
+factive.txt: needed for the factive verbs frequency feature
+hedges.txt: needed for the hedges frequency feature
+implicative.txt: needed for the implicative verbs frequency feature
+report_verbs.txt: needed for the report verbs frequency feature
+sectarian_language_lexicon.txt: needed for the sectarian language verbs frequency feature
+bias.txt, subjclues.txt, negative_words.txt, positive_words.txt: needed for the bias frequency feature
