@@ -1,0 +1,9 @@
+model,winning hyperparameters
+logistic_regression,"penalty:l2, C:1000, "
+extra_trees,"max_depth:2, max_features:sqrt, ccp_alpha:0.2, "
+random_forest,"max_depth:2, max_features:sqrt, min_samples_split:0.2, ccp_alpha:0.4, "
+decision_tree,"max_depth:2, max_features:sqrt, ccp_alpha:0.1, "
+gradient_boost,"n_estimators:2, max_features:sqrt, max_depth:2, subsample:1, ccp_alpha:0.1, "
+xg_boost,"max_depth:3, min_child_weight:3, gamma:0.2, colsample_bytree:0.6, objective:reg:squarederror, reg_alpha :0.9, "
+ada_boost,"base_estimator:RidgeClassifier(alpha=0.9), n_estimators:1, algorithm:SAMME, "
+nu_svc,"nu:0.5, kernel:linear, gamma:0.6, tol:1e-05, probability:True, "
