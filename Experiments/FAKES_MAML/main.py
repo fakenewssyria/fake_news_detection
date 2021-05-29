@@ -45,9 +45,6 @@ flags.DEFINE_integer('num_classes', 2, 'number of classes used in classification
 flags.DEFINE_string('training_data_path', 'input/feature_extraction_train_updated.csv', 'path to training data')
 flags.DEFINE_string('testing_data_path', 'input/feature_extraction_test_updated.csv', 'path to testing data')
 flags.DEFINE_string('target_variable', 'label', 'name of the target variable column')
-flags.DEFINE_string('include_fp', '0', 'whether to include frequent pattern in mining tasks or not, if yes 1, if no 0')
-flags.DEFINE_string('fp_file', 'fake_news_fps_colsmeta/fps_fakenews_0.9.pickle', 'path to file containing the frequent patterns')
-flags.DEFINE_string('colsmeta_file', 'fake_news_fps_colsmeta/colsmeta_fakenews_0.9.pickle', 'path to file containing the colsmeta')
 flags.DEFINE_list('cols_drop', ['article_title', 'article_content', 'source', 'source_category', 'unit_id'], 'list of column to drop from data, if any')
 
 flags.DEFINE_string('special_encoding', 'latin-1', 'special encoding needed to read the data, if any')
