@@ -1,7 +1,12 @@
 import pandas as pd
 import os
 import matplotlib
+mm = (1/2.54)/10  # milimeters in inches
 matplotlib.use('Agg')
+matplotlib.rcParams['font.sans-serif'] = "Arial"
+matplotlib.rcParams['font.family'] = "sans-serif"
+matplotlib.rcParams.update({'font.size': 8})
+matplotlib.rcParams["figure.figsize"] = (85*mm, 85*mm)
 import matplotlib.pyplot as plt
 from sklearn.metrics import *
 import warnings
@@ -75,28 +80,33 @@ class AdvancedEvaluator:
     def produce_empirical_risk_curves(self):
         ''' produce plot of mean empirical risks '''
         self.build_mean_empirical_risks()
+        colors = ['b', 'm', 'g']
         for i in range(len(self.models_results)):
-            plt.plot(range(1, self.nb_bins + 1), self.mean_empirical_risks[i], marker='o', label=self.model_names[i])
+            plt.plot(range(1, self.nb_bins + 1), self.mean_empirical_risks[i], marker='o', label=self.model_names[i], color=colors[i])
         plt.legend(loc='best')
         plt.xlabel('Bins')
         plt.ylabel('Mean Empirical risks')
         plt.savefig(os.path.join(self.plots_output_folder, 'mean_empirical_risks.png'))
+        plt.savefig(os.path.join(self.plots_output_folder, 'mean_empirical_risks.pdf'), dpi=300)
         plt.close()
 
     def produce_roc_curves(self):
         ''' ROC AUC Curves '''
+        colors = ['b', 'm', 'g']
         for i in range(len(self.fprs)):
-            plt.plot(self.fprs[i], self.tprs[i], linestyle='--', label=self.model_names[i])
+            plt.plot(self.fprs[i], self.tprs[i], linestyle='--', label=self.model_names[i], color=colors[i])
         # title
         plt.title('ROC curve')
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive rate')
         plt.legend(loc='best')
         plt.savefig(os.path.join(self.plots_output_folder, 'roc_curves.png'))
+        plt.savefig(os.path.join(self.plots_output_folder, 'roc_curves.pdf'), dpi=300)
         plt.close()
 
     def produce_curves_topK(self, topKs):
         ''' precision & recall at top K curves '''
+        colors = ['b', 'm', 'g']
         for metric in ['precision', 'recall']:
             i = 0
             for model_num_name in self.models_results:
@@ -113,7 +123,8 @@ class AdvancedEvaluator:
                         recall_curr = recall_score(y_true_curr, y_pred_curr)
                         metrics.append(recall_curr)
                 # plt.plot(topKs, metrics, label=self.model_names[i-1], marker='o')
-                plt.plot(topKs, metrics, label=model_num_name, marker='o')
+                plt.plot(topKs, metrics, label=model_num_name, marker='o', color=colors[i])
+                plt.ylim([0.5, 1.1])
                 i += 1
 
             plt.legend(loc='best')
@@ -121,9 +132,11 @@ class AdvancedEvaluator:
             if metric == 'precision':
                 plt.ylabel('Precision')
                 plt.savefig(os.path.join(self.plots_output_folder, 'precisions_topK.png'))
+                plt.savefig(os.path.join(self.plots_output_folder, 'precisions_topK.pdf'), dpi=300)
             else:
                 plt.ylabel('Recall')
                 plt.savefig(os.path.join(self.plots_output_folder, 'recalls_topK.png'))
+                plt.savefig(os.path.join(self.plots_output_folder, 'recalls_topK.pdf'), dpi=300)
             plt.close()
 
 
