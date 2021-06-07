@@ -3,8 +3,7 @@ from sklearn.feature_selection import RFE
 from sklearn.linear_model import Lasso
 from sklearn.ensemble import ExtraTreesRegressor, ExtraTreesClassifier
 from sklearn.tree import DecisionTreeClassifier
-from xgboost import XGBRegressor, XGBClassifier
-from sklearn.decomposition import PCA
+from xgboost import XGBClassifier
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from scipy.stats import boxcox
 import pandas as pd
@@ -17,7 +16,6 @@ from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_regressi
 # variables that control the number of features to be selected in each FS method
 NUM_FEATURES_UNIVARIATE = 4  # This should be less than the total number of input features
 NUM_FEATURES_RFE = 4  # This should be less than the total number of input features
-NUM_FEATURES_PCA = 2  # This should be less than the total number of input features
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -26,7 +24,7 @@ warnings.filterwarnings("ignore")
     User edits in this file
     --------------------
 
-    lines 16, 17, and 18 in order to control the number of features to be selected in each feature selection method
+    lines 18, 19, and 20 in order to control the number of features to be selected in each feature selection method
 
 
     Scaling
@@ -68,6 +66,12 @@ warnings.filterwarnings("ignore")
 
     * output_folder: the path to the output folder that will be holding several modeling plots. If the path specified does not exist, it will be created dynamically at runtime.
 
+    Regression vs. Classification
+    ------------------------------
+    
+    If Regression, then specify regression=True. If Classification, then specify regression=False
+    
+    
     Columns
     --------------------
 
@@ -107,9 +111,6 @@ warnings.filterwarnings("ignore")
     * univariate(): Applies Univariate Feature Selection with NUM_FEATURES_UNIVARIATE being selected (specified in line 17 in feature_selection_code.py). Raises Vlaue Error in this is greater than the total number of input features.
 
     * rfe():  Applies Recursive Feature Elimination with NUM_FEATURES_RFE being selected (specified in line 18 in feature_selection_code.py). Raises Vlaue Error in this is greater than the total number of input features.
-
-    * pca():  Applies PCA NUM_FEATURES_PCA principal components done. (specified in line 19 in feature_selection_code.py). Raises Vlaue Error in this is greater than the total number of input features.
-
 """
 
 
@@ -171,29 +172,6 @@ class FeatureSelection:
         # whether its a regression or classification problem
         self.regression = regression
 
-        self.labelsdict = {
-            'demand': 'demand',
-            'civilians_rank': 'civilians',
-            'distance': 'dist',
-            'AverageTemp': 'Avg.Temp',
-            'AverageWindSpeed': 'Avg.WS',
-            'Precipitation': 'precip',
-            'w_{t-1}': 't-1',
-            'w_{t-2}': 't-2',
-            'w_{t-3}': 't-3',
-            'w_{t-4}': 't-4',
-            'w_{t-5}': 't-5',
-            'w_{t-1}_trend': 'trend',
-            'w_{t-1}_seasonality': 'season',
-            'service_General Medicine': 'Gen.Med',
-            'service_Gynaecology': 'Gynaecol',
-            'service_Pediatrics': 'Ped',
-            'service_Pharmacy': 'Pharm',
-            'mohafaza_B': 'mB',
-            'mohafaza_N': 'mN',
-            'mohafaza_NE': 'mNE',
-        }
-
         if scale:
             # if we want to scale
             if input_zscore is not None:
@@ -252,7 +230,7 @@ class FeatureSelection:
 
         return reduced_df
 
-    def drop_high_correlation(self, moph_project=False):
+    def drop_high_correlation(self):
         '''
         drops columns that have high correlation with each other
         :param moph_project: boolean, indicating if this is for this particular project. If yes,
@@ -265,10 +243,6 @@ class FeatureSelection:
         # check if output folder exists, if not create it
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
-
-        # labels to replace columns names by for shorter representation
-        if moph_project:
-            df = df.rename(columns=self.labelsdict)
 
         # the correlation matrix plot
         corr = df.corr()
@@ -289,11 +263,6 @@ class FeatureSelection:
         plt.savefig(output_folder + 'corr_matrix', dpi=100)
         plt.close()
 
-        # for tick in ax.xaxis.get_major_ticks():
-        #     tick.label.set_fontsize(6)
-
-        # the columns with high correlation part
-
         # redefine the data frame (with the original namings - not the abbreviations)
         df = self.df
         corr_matrix = df.corr().abs()
@@ -306,7 +275,6 @@ class FeatureSelection:
         reduced_df = df.drop(to_drop, axis=1)
         print("The reduced_df dataframe has {} columns".format(reduced_df.shape[1]))
         print("Dropped columns: {}".format(to_drop))
-
 
     def feature_importance(self, xg_boost=True, extra_trees=False):
         """
@@ -325,23 +293,6 @@ class FeatureSelection:
 
         if xg_boost:
             print('\n********** Method 4: Calculating the feature importance using XGBoost. **********\n')
-            ''' feature importance using XGBoost '''
-            # model = XGBRegressor(n_estimators=100)
-            # model.fit(X, y)
-            # feature_imp = {}
-            # for i in range(len(model.feature_importances_)):
-            #     # print('%s: %.5f' % (columns[i], model.feature_importances_[i]))
-            #     feature_imp[feature_names[i]] = model.feature_importances_[i]
-            # feature_imp = dict(sorted(feature_imp.items(), key=lambda kv: kv[1], reverse=True))
-            # df_imp_xgb = pd.DataFrame(columns=['feature', 'importance'])
-            # print('\nFeatures - Importance\n')
-            # for key, value in feature_imp.items():
-            #     print('%s: %.5f' % (key, value))
-            #     df_imp_xgb = df_imp_xgb.append({
-            #         'feature': key,
-            #         'importance': '{:.5f}'.format(value)
-            #     }, ignore_index=True)
-            # print('\n')
 
             if self.regression:
                 # feature_names = feature_names
@@ -371,8 +322,8 @@ class FeatureSelection:
                     'importance': '{:.5f}'.format(value)
                 }, ignore_index=True)
             print('\n')
-            #
-            # # Plot the feature importances
+
+            # Plot the feature importances
             if self.regression:
                 xgb.plot_importance(xg_reg)
             else:
@@ -400,10 +351,7 @@ class FeatureSelection:
                 # print('%s: %.5f' % (columns[i], model.feature_importances_[i]))
                 feature_imp[feature_names[i]] = model.feature_importances_[i]
             feature_imp = dict(sorted(feature_imp.items(), key=lambda kv: kv[1], reverse=True))
-            # print('\nFeatures - Importance\n')
-            # for key, value in feature_imp.items():
-            #     print('%s: %.5f' % (key, value))
-            # print('\n')
+
             df_imp_ext = pd.DataFrame(columns=['feature', 'importance'])
             print('\nFeatures - Importance\n')
             for key, value in feature_imp.items():
@@ -429,29 +377,28 @@ class FeatureSelection:
             print('saved plot in {}/{}'.format(output_folder, 'extratrees_fs.png'))
             df_imp_ext.to_csv(os.path.join(output_folder, 'extratrees_fs_importances.csv'), index=False)
 
-    def univariate(self, moph_project=False):
+    def univariate(self):
         ''' univariate feature selection '''
 
         if NUM_FEATURES_UNIVARIATE > self.X.shape[1]:
             raise ValueError('NUM_FEATURES_UNIVARIATE must be less than the total number of input columns.'
                              '\n. Please change line 18 in feature_selection_code.py')
+
         print('\n********** Method 6: Univariate Feature Selection **********\n')
-        # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=101)
 
         X = self.X_df
         y = self.y_df
-        labels = self.labelsdict
-        # labels to replace columns names by for shorter representation
-        if moph_project:
-            del labels[self.target_variable]
-            X = X.rename(columns=self.labelsdict)
 
         output_folder = self.output_folder
 
-        univariate = f_regression(X, y)
+        if self.regression:
+            univariate = f_regression(X, y)
+            univariate = pd.Series(univariate[1])
+        else:
+            univariate = mutual_info_classif(X, y)
+            univariate = pd.Series(univariate)
 
         # Capture P values in a series
-        univariate = pd.Series(univariate[1])
         univariate.index = X.columns
         univariate.sort_values(ascending=False, inplace=True)
         # Plot the P values
