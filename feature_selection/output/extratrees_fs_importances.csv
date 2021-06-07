@@ -1,0 +1,10 @@
+feature,importance
+sectarian_language,0.43789
+quoted_sources,0.11052
+bias,0.08975
+report_verbs,0.08223
+consistency_score,0.06994
+assertive_verbs,0.06722
+implicative_verbs,0.05639
+hedges,0.05221
+factive_verbs,0.03386
