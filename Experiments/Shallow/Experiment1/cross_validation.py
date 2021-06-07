@@ -77,7 +77,8 @@ class LearningModelCrossVal:
 
         self.results_winning = pd.DataFrame(columns=['model', 'winning hyperparameters'])
 
-    def cross_validation(self, model_to_use, possible_hyperparams, model_name, nb_splits, df_test, nb_repeats=None, probabilistic=True):
+    def cross_validation(self, model_to_use, possible_hyperparams, model_name, nb_splits, df_test, nb_repeats=None, probabilistic=True,
+                         pos_class_label=1):
         '''
         cross validation function with hyper parameter tuning
         :param model_to_use: sklearn model
@@ -233,7 +234,7 @@ class LearningModelCrossVal:
 
         # generate probability of the positive class
         if probabilistic:
-            probas = model.predict_proba(X_test)[:, 1]
+            probas = model.predict_proba(X_test)[:, pos_class_label]
 
         accuracy, precision, recall, f_measure, auc = self.get_stats(y_test, y_pred)
 
@@ -278,7 +279,7 @@ class LearningModelCrossVal:
 
         # produce a risk data frame for advanced ml evaluation
         if probabilistic:
-            self.generate_risk_dataframe(probas, y_test, y_pred, model_name)
+            self.generate_risk_dataframe(probas, y_test, y_pred, model_name, pos_class_label)
         return model
 
     def save_error_metrics(self):
@@ -289,7 +290,7 @@ class LearningModelCrossVal:
         self.results_testing.sort_values(by=['accuracy'], ascending=False).to_csv(os.path.join(errors_folder, 'testing_errors.csv'), index=False)
         self.results_winning.to_csv(os.path.join(errors_folder, 'winning_hyperparameters.csv'), index=False)
 
-    def generate_risk_dataframe(self, probas, y_test, y_pred, model_name):
+    def generate_risk_dataframe(self, probas, y_test, y_pred, model_name, pos_class_label=1):
         test_indexes = list(self.y_test_df.index)
         self.test_indexes = test_indexes
         risk_scores = probas
@@ -326,7 +327,7 @@ class LearningModelCrossVal:
             # ground_truth = self.y_test_df.loc[test_indices_curr, :]
             ground_truth = df['y_test']
             # mean_empirical_risk.append(list(ground_truth[self.target_variable]).count(1)/len(ground_truth))
-            mean_empirical_risk.append(list(ground_truth).count(1) / len(ground_truth))
+            mean_empirical_risk.append(list(ground_truth).count(pos_class_label) / len(ground_truth))
         print('quantiles: {}'.format(quantiles_sorted))
         print('mean empirical risk: {}'.format(mean_empirical_risk))
         self.save_risk_dataframe(risk_df, model_name)
