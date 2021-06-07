@@ -9,6 +9,14 @@ from scipy.stats import boxcox
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import matplotlib
+mm = (1/2.54)/10  # milimeters in inches
+matplotlib.use('Agg')
+matplotlib.rcParams['font.sans-serif'] = "Arial"
+matplotlib.rcParams['font.family'] = "sans-serif"
+matplotlib.rcParams.update({'font.size': 8})
+matplotlib.rcParams["figure.figsize"] = (85*mm, 85*mm)
+
 import os
 import xgboost as xgb
 from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_regression, mutual_info_classif
@@ -110,6 +118,18 @@ warnings.filterwarnings("ignore")
     * rfe():  Applies Recursive Feature Elimination with NUM_FEATURES_RFE being selected (specified in line 18 in feature_selection_code.py). Raises Vlaue Error in this is greater than the total number of input features.
 """
 
+feature_names_map = {
+    'sectarian_language': 'sectarian words',
+    'consistency_score': 'inconsistency score',
+    'quoted_sources': 'quoted sources and attribution',
+    'hedges': 'hedges',
+    'implicative_verbs': 'implicative verbs',
+    'report_verbs': 'report verbs',
+    'factive_verbs': 'factive verbs',
+    'bias': 'subjectivity and bias',
+    'assertive_verbs': 'assertive verbs'
+}
+
 
 class FeatureSelection:
 
@@ -125,6 +145,9 @@ class FeatureSelection:
 
         # drop NaN values
         df = df.dropna()
+
+        # rename columns in dataframe - just for FAKES
+        df = df.rename(columns=feature_names_map)
 
         # features/columns names (without including target variable)
         self.feature_names = list(df.drop(target_variable, axis=1).columns.values)
@@ -250,14 +273,14 @@ class FeatureSelection:
         ax.set_ylim(20.0, 0)
         heatmap = sns.heatmap(corr, mask=mask, center=0, linewidths=1, annot=True, fmt=".2f", ax=ax)
         heatmap = heatmap.get_figure()
-        heatmap.set_size_inches(18.5, 10.5)
+        # heatmap.set_size_inches(18.5, 10.5)
 
         # rotate x ticks
         ax.tick_params(axis='x', rotation=45)
         ax.tick_params(axis='y', rotation=45)
 
         plt.title('Correlation matrix')
-        plt.savefig(output_folder + 'corr_matrix', dpi=100)
+        plt.savefig(output_folder + 'corr_matrix', dpi=300)
         plt.close()
 
         # redefine the data frame (with the original namings - not the abbreviations)
@@ -330,8 +353,7 @@ class FeatureSelection:
                 os.makedirs(output_folder)
             fig = plt.gcf()
             fig.set_size_inches(15, 10.5)
-            plt.title('XGBoost Feature Importance')
-            fig.savefig(output_folder + 'xgb_fs', dpi=100)
+            fig.savefig(output_folder + 'xgb_fs', dpi=300)
             plt.close()
             print('saved plot in {}/{}'.format(output_folder, 'xgb_fs'))
             df_imp_xgb.to_csv(os.path.join(output_folder, 'xgb_fs_importances.csv'), index=False)
@@ -368,8 +390,7 @@ class FeatureSelection:
                 os.makedirs(output_folder)
             fig = plt.gcf()
             fig.set_size_inches(15, 10.5)
-            plt.title('Extra Trees Feature Importance')
-            fig.savefig(output_folder + 'extratrees_fs.png', dpi=100)
+            fig.savefig(output_folder + 'extratrees_fs.png', dpi=300)
             plt.close()
             print('saved plot in {}/{}'.format(output_folder, 'extratrees_fs.png'))
             df_imp_ext.to_csv(os.path.join(output_folder, 'extratrees_fs_importances.csv'), index=False)
@@ -399,16 +420,17 @@ class FeatureSelection:
         univariate.index = X.columns
         univariate.sort_values(ascending=False, inplace=True)
         # Plot the P values
-        univariate.sort_values(ascending=False).plot.bar(figsize=(20, 8))
+        univariate.sort_values(ascending=False).plot.bar(figsize=(25, 15))
+        univariate.sort_values(ascending=False).plot.bar()
         # plt.show()
-        plt.yscale("log")
-        plt.xticks(rotation=45)
+        # plt.yscale("log")
+        plt.xticks(rotation=25)
+        plt.xticks(fontsize=14)
 
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
 
-        plt.title('Univariate Feature Selection')
-        plt.savefig(output_folder + 'univariate_fs')
+        plt.savefig(output_folder + 'univariate_fs', dpi=300)
         plt.close()
 
         if self.regression:
