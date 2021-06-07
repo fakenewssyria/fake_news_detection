@@ -25,10 +25,13 @@ The, we then group news into bins based on the percentiles they fall into when c
 The bottom 10\% of news who have the least risk are grouped into a single bin. Those that rank between 10th and 20th percentile are grouped in the next bin and so on. 
 For each such bin, we compute the **empirical risk score** _which is the fraction of news from that bin who actually, as per ground truth, are positive._ A good model would be classifying news correctly if the _empirical risk curve_ is monotonically non-decreasing.
 If the empirical risk curve is non-monotonic for some models, it implies that the classification using the model's risk scores may result in scenarios where news with lower risk scores are more likely to be fake compared to news with higher risk scores.
-![alt text](https://github.com/fakenewssyria/fake_news_detection/blob/master/Experiments/advanced_ml_plots_all/mean_empirical_risks.png)
+![Mean Empirical Risks](https://github.com/fakenewssyria/fake_news_detection/blob/master/Experiments/advanced_ml_plots_all/mean_empirical_risks.png)
 
 ### Precision + Recall at Top K
 Precision and Recall at Top K news that are at risk of being Positive.
 
-![alt text](https://github.com/fakenewssyria/fake_news_detection/blob/master/Experiments/advanced_ml_plots_all/precisions_topK.png)
-![alt text](https://github.com/fakenewssyria/fake_news_detection/blob/master/Experiments/advanced_ml_plots_all/recalls_topK.png)
+![Precision Top K](https://github.com/fakenewssyria/fake_news_detection/blob/master/Experiments/advanced_ml_plots_all/precisions_topK.png)
+![Recall Top K](https://github.com/fakenewssyria/fake_news_detection/blob/master/Experiments/advanced_ml_plots_all/recalls_topK.png)
+
+### ROC-AUC Curves
+![ROC AUC Curve](https://github.com/fakenewssyria/fake_news_detection/blob/master/Experiments/advanced_ml_plots_all/roc_curves.png)
