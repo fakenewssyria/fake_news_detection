@@ -40,3 +40,6 @@ comment the ```test_features_model()``` in the main function call in the main.py
 We have also run advanced machine learning evaluations to assess the quality of the predictions of each of the best meta learners and best performing shallow model:
   * Results can be found [here](https://github.com/fakenewssyria/fake_news_detection/tree/master/Experiments/advanced_ml_plots_all)
   * Code for Running Advanced Evaluations can be found [here](https://github.com/fakenewssyria/fake_news_detection/blob/master/Experiments/AdvanedEvaluation.py)
+
+# Crowd Sourced Annotations
+ * Can be found [here](https://github.com/fakenewssyria/fake_news_detection/blob/master/crowdsourced-annotations.xlsx)
