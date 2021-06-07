@@ -85,9 +85,6 @@ warnings.filterwarnings("ignore")
         * If NUM_FEATURES_UNIVARIATE (line 16 in feature_selection_code.py)is greater than the total number of input features.
     ValueError
         * If NUM_FEATURES_RFE (line 17 in feature_selection_code.py) is greater than the total number of input features.
-    ValueError
-        * If NUM_FEATURES_PCA (line 19 in feature_selection_code.py) is greater than the total number of input features.
-
 
     Feature Selection Methods:
     --------------------------
