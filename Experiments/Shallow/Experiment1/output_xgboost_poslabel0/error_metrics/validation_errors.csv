@@ -1,0 +1,2 @@
+model,accuracy,precision,recall,f1,auc
+xg_boost,0.88316,0.87112,0.92543,0.89638,0.87911

@@ -1,0 +1,2 @@
+model,winning hyperparameters
+xg_boost,"max_depth:3, min_child_weight:3, gamma:0.2, colsample_bytree:0.6, objective:reg:squarederror, reg_alpha :0.9, "
