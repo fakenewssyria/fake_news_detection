@@ -19,11 +19,6 @@ class AdvancedEvaluator:
     def __init__(self, plots_output_folder, models_results, nb_bins=10):
 
         self.models_results = models_results
-        # self.models_results = {
-        #     'MAML': 'risk_dataframes/risk_df_maml.csv',
-        #     'ARML': 'risk_dataframes/risk_df_arml.csv',
-        #     'XGBoost': 'risk_dataframes/risk_df_xg_boost.csv'
-        # }
 
         # self.models_results = models_results
         self.nb_bins = nb_bins
@@ -97,8 +92,7 @@ class AdvancedEvaluator:
         colors = ['b', 'm', 'g']
         for i in range(len(self.fprs)):
             plt.plot(self.fprs[i], self.tprs[i], linestyle='--', label=self.model_names[i], color=colors[i])
-        # title
-        plt.title('ROC curve')
+
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive rate')
         plt.legend(loc='best')
@@ -147,7 +141,6 @@ if __name__ == '__main__':
     # Considering the positive class labelled 1
     models_results = {
         'MAML': 'risk_dataframes/pos_label_1/risk_df_maml.csv',
-        'ARML': 'risk_dataframes/pos_label_1/risk_df_arml.csv',
         'XGBoost': 'risk_dataframes/pos_label_1/risk_df_xg_boost.csv'
     }
     ae = AdvancedEvaluator(plots_output_folder='advanced_ml_plots_all/', models_results=models_results)
@@ -160,7 +153,6 @@ if __name__ == '__main__':
     # Considering the positive class labelled 0
     models_results = {
         'MAML': 'risk_dataframes/pos_label_0/risk_df_poslabel0_maml.csv',
-        'ARML': 'risk_dataframes/pos_label_0/risk_df_poslabel0_arml.csv',
         'XGBoost': 'risk_dataframes/pos_label_0/risk_df_xg_boost.csv'
     }
     ae = AdvancedEvaluator(plots_output_folder='advanced_ml_plots_all_poslabel0/', models_results=models_results)
