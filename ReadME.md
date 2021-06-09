@@ -32,7 +32,7 @@ comment the ```test_features_model()``` in the main function call in the main.py
   * You can change the paths in the ```test_text_model()``` function in the main.py file in order to test it on other datasets. The other datasets are found in the other_datasets directory (Buzzfeed train and test features extraction are there)
 
 # Meta-Learning vs. Shallow Models 
-  * We have applied meta learning to the FAKES dataset. More specifically, we experimented with MAML & ARML
+  * We have applied meta learning to the FAKES dataset. More specifically, we experimented with MAML
   * We have compared performance to shallow models
   * All Experiments can be found [here](https://github.com/fakenewssyria/fake_news_detection/tree/master/Experiments)
 
