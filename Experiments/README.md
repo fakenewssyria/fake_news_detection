@@ -7,11 +7,6 @@ Contains the code used for running MAML algorithm on the FAKES dataset. The code
   * Be run on Structure/Tabular 2D datasets
   * Take as input the training and testing datasets
 
-## FAKES_ARML
-Contains the code used for running ARML algorithm on the FAKES dataset. The code is originally taken from [here](https://github.com/huaxiuyao/ARML). Minor modifications to the code are made so that it could:
-  * Be run on Structure/Tabular 2D datasets
-  * Take as input the training and testing datasets
-
 ## Shallow
 Contains the code used for running cross validation with hyper parameter tuning on FAKES datasets.
 
